@@ -1,0 +1,5 @@
+"./GPIO_Driver.obj"
+"./1. Software Defined PWM/Part1.obj"
+"../lnk_msp430fr2355.cmd"
+-lfrwp_init.a
+-llibc.a
