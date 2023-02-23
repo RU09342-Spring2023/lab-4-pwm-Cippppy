@@ -11,7 +11,7 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./GPIO_Driver.obj" \
-"./1. Software Defined PWM/Part1.obj" \
+"./3. Servo Control/Part3.obj" \
 "../lnk_msp430fr2355.cmd" \
 $(GEN_CMDS__FLAG) \
 -lfrwp_init.a \
@@ -25,7 +25,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include 3.\ Servo\ Control/subdir_vars.mk
 -include subdir_rules.mk
+-include 3.\ Servo\ Control/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -143,8 +145,8 @@ Lab4.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "GPIO_Driver.obj" "1. Software Defined PWM\Part1.obj" 
-	-$(RM) "GPIO_Driver.d" "Part1.d" 
+	-$(RM) "GPIO_Driver.obj" "3. Servo Control\Part3.obj" 
+	-$(RM) "GPIO_Driver.d" "Part3.d" "3. Servo Control\Part3.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

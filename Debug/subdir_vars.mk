@@ -10,26 +10,26 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../GPIO_Driver.c \
-../1.\ Software\ Defined\ PWM/Part1.c 
+../3.\ Servo\ Control/Part3.c 
 
 C_DEPS += \
 ./GPIO_Driver.d \
-./Part1.d 
+./Part3.d 
 
 OBJS += \
 ./GPIO_Driver.obj \
-./1.\ Software\ Defined\ PWM/Part1.obj 
+./3.\ Servo\ Control/Part3.obj 
 
 OBJS__QUOTED += \
 "GPIO_Driver.obj" \
-"1. Software Defined PWM\Part1.obj" 
+"3. Servo Control\Part3.obj" 
 
 C_DEPS__QUOTED += \
 "GPIO_Driver.d" \
-"Part1.d" 
+"Part3.d" 
 
 C_SRCS__QUOTED += \
 "../GPIO_Driver.c" \
-"../1. Software Defined PWM/Part1.c" 
+"../3. Servo Control/Part3.c" 
 
 

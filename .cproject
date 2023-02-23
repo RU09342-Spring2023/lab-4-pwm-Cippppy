@@ -98,7 +98,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Part2.c|2. Hardware Defined PWM/Part2.c|1. Software Defined PWM/Part1.c|Part3.c|3. Servo Control/Part3.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Part2.c|Part1.c|2. Hardware Defined PWM/Part2.c|1. Software Defined PWM/Part1.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
