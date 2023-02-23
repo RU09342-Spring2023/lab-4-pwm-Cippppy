@@ -88,7 +88,7 @@ __interrupt void Port_2(void)
 {
     P2IFG &= ~BIT3;                         // Clear P2.3 IFG
     if(TB0CCR1 >= 999) {
-        TB0CCR1 = 0;
+        TB0CCR1 = 25;
     }
     else {
         TB0CCR1 += 100;
@@ -101,7 +101,7 @@ __interrupt void Port_4(void)
 {
     P4IFG &= ~BIT1;                         // Clear P4.1 IFG
     if(TB1CCR1 >= 999) {
-        TB1CCR1 = 0;
+        TB1CCR1 = 25;
     }
     else {
         TB1CCR1 += 100;

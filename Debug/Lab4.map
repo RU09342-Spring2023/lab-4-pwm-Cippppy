@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v21.6.1                     
 ******************************************************************************
->> Linked Wed Feb 22 15:15:38 2023
+>> Linked Wed Feb 22 20:38:32 2023
 
 OUTPUT FILE NAME:   <Lab4.out>
-ENTRY POINT SYMBOL: "_c_int00_noinit_noargs_mpu"  address: 000080b8
+ENTRY POINT SYMBOL: "_c_int00_noinit_noargs_mpu"  address: 000082dc
 
 
 MEMORY CONFIGURATION
@@ -17,7 +17,7 @@ MEMORY CONFIGURATION
   TLVMEM                00001a00   00000200  00000000  00000200  RWIX
   BOOTCODE              00001c00   00000400  00000000  00000400  RWIX
   RAM                   00002000   00001000  000000a0  00000f60  RWIX
-  FRAM                  00008000   00007f80  000000d8  00007ea8  RWIX
+  FRAM                  00008000   00007f80  000002fc  00007c84  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   BSLCONFIGURATIONSIGNA 0000ff88   00000002  00000002  00000000  RWIX  ffff 
@@ -103,31 +103,40 @@ section   page    origin      length       input sections
 
 .const     0    00008000    00000000     UNINITIALIZED
 
-.text      0    00008000    000000b8     
-                  00008000    0000003c     FRWP_INIT_LIB_CCS_msp430_large_code_small_data.lib : frwp_init.obj (.text:__mpu_init)
-                  0000803c    00000030     Part2.obj (.text:TimerB0Init)
-                  0000806c    00000026     Part2.obj (.text:LEDInit)
-                  00008092    0000001c     Part2.obj (.text:main)
-                  000080ae    00000006     rts430x_lc_sd_eabi.lib : exit.c.obj (.text:abort)
-                  000080b4    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+.text      0    00008000    00000264     
+                  00008000    000000d4     GPIO_Driver.obj (.text:gpioInit)
+                  000080d4    0000008c     GPIO_Driver.obj (.text:gpioWrite)
+                  00008160    0000003c     FRWP_INIT_LIB_CCS_msp430_large_code_small_data.lib : frwp_init.obj (.text:__mpu_init)
+                  0000819c    00000032     Part1.obj (.text:LEDInit)
+                  000081ce    00000028     Part1.obj (.text:ButtonInit)
+                  000081f6    00000026     Part1.obj (.text:main)
+                  0000821c    0000001a     Part1.obj (.text:TimerA0Init)
+                  00008236    0000001a     Part1.obj (.text:TimerA1Init)
+                  00008250    0000000a     rts430x_lc_sd_eabi.lib : lsl16.asm.obj (.text)
+                  0000825a    00000006                            : exit.c.obj (.text:abort)
+                  00008260    00000004                            : pre_init.c.obj (.text:_system_pre_init)
 
 .text:_isr 
-*          0    000080b8    00000020     
-                  000080b8    00000018     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noinit_noargs_mpu)
-                  000080d0    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    00008264    00000098     
+                  00008264    00000022     Part1.obj (.text:_isr:TIMER1_B1_ISR)
+                  00008286    0000001e     Part1.obj (.text:_isr:TIMER0_B1_ISR)
+                  000082a4    0000001c     Part1.obj (.text:_isr:Port_2)
+                  000082c0    0000001c     Part1.obj (.text:_isr:Port_4)
+                  000082dc    00000018     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noinit_noargs_mpu)
+                  000082f4    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
 .stack     0    00002f60    000000a0     UNINITIALIZED
                   00002f60    00000002     rts430x_lc_sd_eabi.lib : boot.c.obj (.stack)
                   00002f62    0000009e     --HOLE--
 
 PORT4      0    0000ffce    00000002     
-                  0000ffce    00000002     rts430x_lc_sd_eabi.lib : int22.asm.obj (.int22)
+                  0000ffce    00000002     Part1.obj (.int22)
 
 PORT3      0    0000ffd0    00000002     
                   0000ffd0    00000002     rts430x_lc_sd_eabi.lib : int23.asm.obj (.int23)
 
 PORT2      0    0000ffd2    00000002     
-                  0000ffd2    00000002     rts430x_lc_sd_eabi.lib : int24.asm.obj (.int24)
+                  0000ffd2    00000002     Part1.obj (.int24)
 
 PORT1      0    0000ffd4    00000002     
                   0000ffd4    00000002     rts430x_lc_sd_eabi.lib : int25.asm.obj (.int25)
@@ -183,7 +192,7 @@ TIMER2_B0
 
 TIMER1_B1 
 *          0    0000fff2    00000002     
-                  0000fff2    00000002     rts430x_lc_sd_eabi.lib : int40.asm.obj (.int40)
+                  0000fff2    00000002     Part1.obj (.int40)
 
 TIMER1_B0 
 *          0    0000fff4    00000002     
@@ -191,7 +200,7 @@ TIMER1_B0
 
 TIMER0_B1 
 *          0    0000fff6    00000002     
-                  0000fff6    00000002     rts430x_lc_sd_eabi.lib : int42.asm.obj (.int42)
+                  0000fff6    00000002     Part1.obj (.int42)
 
 TIMER0_B0 
 *          0    0000fff8    00000002     
@@ -225,10 +234,15 @@ MODULE SUMMARY
 
        Module             code   ro data   rw data
        ------             ----   -------   -------
-    .\2. Hardware Defined PWM\
-       Part2.obj          114    0         0      
+    .\
+       GPIO_Driver.obj    352    0         0      
     +--+------------------+------+---------+---------+
-       Total:             114    0         0      
+       Total:             352    0         0      
+                                                  
+    .\1. Software Defined PWM\
+       Part1.obj          300    8         0      
+    +--+------------------+------+---------+---------+
+       Total:             300    8         0      
                                                   
     C:\ti\ccs1220\ccs\ccs_base\msp430\lib\FR2xx\FRWP_INIT_LIB_CCS_msp430_large_code_small_data.lib
        frwp_init.obj      60     0         0      
@@ -237,12 +251,11 @@ MODULE SUMMARY
                                                   
     C:\ti\ccs1220\ccs\tools\compiler\ti-cgt-msp430_21.6.1.LTS\lib\rts430x_lc_sd_eabi.lib
        boot.c.obj         24     2         0      
+       lsl16.asm.obj      10     0         0      
        isr_trap.asm.obj   8      0         0      
        exit.c.obj         6      0         0      
        pre_init.c.obj     4      0         0      
-       int22.asm.obj      0      2         0      
        int23.asm.obj      0      2         0      
-       int24.asm.obj      0      2         0      
        int25.asm.obj      0      2         0      
        int26.asm.obj      0      2         0      
        int27.asm.obj      0      2         0      
@@ -258,18 +271,16 @@ MODULE SUMMARY
        int37.asm.obj      0      2         0      
        int38.asm.obj      0      2         0      
        int39.asm.obj      0      2         0      
-       int40.asm.obj      0      2         0      
        int41.asm.obj      0      2         0      
-       int42.asm.obj      0      2         0      
        int43.asm.obj      0      2         0      
        int44.asm.obj      0      2         0      
        int45.asm.obj      0      2         0      
     +--+------------------+------+---------+---------+
-       Total:             42     50        0      
+       Total:             52     42        0      
                                                   
        Stack:             0      0         160    
     +--+------------------+------+---------+---------+
-       Grand Total:       216    50        160    
+       Grand Total:       764    50        160    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -354,7 +365,8 @@ address   name
 00000672  BAKMEM9                        
 00000673  BAKMEM9_H                      
 00000672  BAKMEM9_L                      
-000080ae  C$$EXIT                        
+000081ce  ButtonInit                     
+0000825a  C$$EXIT                        
 000002ee  CAPTIOCTL                      
 000002ef  CAPTIOCTL_H                    
 000002ee  CAPTIOCTL_L                    
@@ -460,7 +472,7 @@ address   name
 000006c0  ICCSC                          
 000006c1  ICCSC_H                        
 000006c0  ICCSC_L                        
-0000806c  LEDInit                        
+0000819c  LEDInit                        
 000004c4  MAC                            
 000004da  MAC32H                         
 000004db  MAC32H_H                       
@@ -710,6 +722,8 @@ address   name
 0000012a  PMMIFG                         
 0000012b  PMMIFG_H                       
 0000012a  PMMIFG_L                       
+000082a4  Port_2                         
+000082c0  Port_4                         
 000004e4  RES0                           
 000004e5  RES0_H                         
 000004e4  RES0_L                         
@@ -1007,7 +1021,10 @@ address   name
 00000450  TB3R                           
 00000451  TB3R_H                         
 00000450  TB3R_L                         
-0000803c  TimerB0Init                    
+00008286  TIMER0_B1_ISR                  
+00008264  TIMER1_B1_ISR                  
+0000821c  TimerA0Init                    
+00008236  TimerA1Init                    
 00000510  UCA0ABCTL                      
 00000511  UCA0ABCTL_H                    
 00000510  UCA0ABCTL_L                    
@@ -1190,7 +1207,7 @@ address   name
 00008000  __TI_CINIT_Base                
 00008000  __TI_CINIT_Limit               
 00008000  __TI_CINIT_Warm                
-000080d0  __TI_ISR_TRAP                  
+000082f4  __TI_ISR_TRAP                  
 0000ffce  __TI_int22                     
 0000ffd0  __TI_int23                     
 0000ffd2  __TI_int24                     
@@ -1220,16 +1237,19 @@ ffffffff  __TI_prof_data_size
 ffffffff  __TI_prof_data_start           
 ffffffff  __c_args__                     
 00000001  __mpu_enable                   
-00008000  __mpu_init                     
-000080b8  _c_int00_noinit_noargs_mpu     
+00008160  __mpu_init                     
+00008250  __mspabi_slli                  
+000082dc  _c_int00_noinit_noargs_mpu     
 0000fffe  _reset_vector                  
 00002f60  _stack                         
-000080b4  _system_pre_init               
-000080ae  abort                          
+00008260  _system_pre_init               
+0000825a  abort                          
 00008000  fram_rw_start                  
 00008000  fram_rx_start                  
+00008000  gpioInit                       
+000080d4  gpioWrite                      
 00000001  info_fram_protection           
-00008092  main                           
+000081f6  main                           
 00000001  program_fram_protection        
 00000000  start_protection_offset_address
 
@@ -2154,17 +2174,26 @@ address   name
 00008000  __TI_CINIT_Base                
 00008000  __TI_CINIT_Limit               
 00008000  __TI_CINIT_Warm                
-00008000  __mpu_init                     
 00008000  fram_rw_start                  
 00008000  fram_rx_start                  
-0000803c  TimerB0Init                    
-0000806c  LEDInit                        
-00008092  main                           
-000080ae  C$$EXIT                        
-000080ae  abort                          
-000080b4  _system_pre_init               
-000080b8  _c_int00_noinit_noargs_mpu     
-000080d0  __TI_ISR_TRAP                  
+00008000  gpioInit                       
+000080d4  gpioWrite                      
+00008160  __mpu_init                     
+0000819c  LEDInit                        
+000081ce  ButtonInit                     
+000081f6  main                           
+0000821c  TimerA0Init                    
+00008236  TimerA1Init                    
+00008250  __mspabi_slli                  
+0000825a  C$$EXIT                        
+0000825a  abort                          
+00008260  _system_pre_init               
+00008264  TIMER1_B1_ISR                  
+00008286  TIMER0_B1_ISR                  
+000082a4  Port_2                         
+000082c0  Port_4                         
+000082dc  _c_int00_noinit_noargs_mpu     
+000082f4  __TI_ISR_TRAP                  
 0000ffce  __TI_int22                     
 0000ffd0  __TI_int23                     
 0000ffd2  __TI_int24                     
@@ -2195,4 +2224,4 @@ ffffffff  __TI_prof_data_size
 ffffffff  __TI_prof_data_start           
 ffffffff  __c_args__                     
 
-[956 symbols]
+[965 symbols]
