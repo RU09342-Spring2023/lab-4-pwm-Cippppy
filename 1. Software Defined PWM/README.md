@@ -1,32 +1,19 @@
-# Software PWM
-Most microprocessors will have a Timer module, but depending on the device, some may not come with pre-built PWM modules. Instead, you may have to utilize software techniques to synthesize PWM on your own.
+# Software PWM: LED Brightness
+This code uses a software PWM to control the brightness of two LEDs, one green and one red. There are two buttons that cycle through the determined brightneses, each correlating with one LED. The LEDs have 10 different levels and the buttons cycles through theses levels one at a time, reseting to level 1 after it reaches level 10.
 
-## Task
-You need to generate a 1kHz PWM signal with a duty cycle between 0% and 100%. Upon the processor starting up, you should PWM both of the on-board LEDs at a 50% duty cycle. Upon pressing the on-board buttons, the duty cycle of the LEDs should increase by 10%, based on which button you press. Once you have reached 100%, your duty cycle should go back to 0% on the next button press.
- - Button 2.1 Should control LED 1.0
- - Button 4.3 should control LED 6.6
+## Peripherals
+- Pin 1.0, Red LED
+Pin 1.0 is set to an output, toggled by Timer B0interrupt, brightness is changed by Pin 2.3.
+- Pin 6.6, Green LED
+Pin 6.6 is set to an output, toggled by Timer B1interrupt, brightness is changed by Pin 4.1.
+- Pin 2.3, Blinking Speed Button
+Pin 2.3 is set to an input, pullup resistor enabled, interrupt enabled, falling edge.
+- Pin 4.1, Reset Button
+Pin 4.1 is set to an input, pullup resistor enabled, interrupt enabled, falling edge.
+- Timer B0 Peripheral
+Set to TB0CCR1 interrupt, SMCLK, up mode.
+- Timer B1 Peripheral
+Set to TB1CCR1 interrupt, SMCLK, up mode.
 
-## Deliverables
-You will need to upload the .c file and a README explaining your code and any design decisions made.
-
-### Hints
-You really, really, really, really need to hook up the output of your LED pin to an oscilloscope to make sure that the duty cycle is accurate. Also, since you are going to be doing a lot of initialization, it would be helpful for all persons involved if you created your main function like:
-
-```c
-int main(void)
-{
-	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	LEDSetup(); // Initialize our LEDS
-	ButtonSetup();  // Initialize our button
-	TimerA0Setup(); // Initialize Timer0
-	TimerA1Setup(); // Initialize Timer1
-	__bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ interrupt
-}
-```
-
-This way, each of the steps in initialization can be isolated for easier understanding and debugging.
-
-
-## Extra Work
-### Linear Brightness
-Much like every other things with humans, not everything we interact with we perceive as linear. For senses such as sight or hearing, certain features such as volume or brightness have a logarithmic relationship with our senses. Instead of just incrementing by 10%, try making the brightness appear to change linearly.
+## How to use
+First, load the code into code composer or another compiler of your choosing. Next, flash the program to the MSP430FR2355. It will begin by setting both the green and red LEDs to 50% duty cycle (about 50% brightness). You can press the 2.3 button to increment the red LED duty cycle by 10% and the 4.1 button does the same for the green LED. The duty cycle will increase until it hits 100%. The next button press after 100% will reset the duty cycle to 0%, allowing the pattern to repeat.
