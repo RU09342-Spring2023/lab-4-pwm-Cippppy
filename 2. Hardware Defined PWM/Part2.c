@@ -2,7 +2,7 @@
  * Part2.c
  *
  *  Created on: Feb 22, 2023
- *  Edited on: Feb 22, 2023
+ *  Edited on: Feb 28, 2023
  *      Author: Christian Cipolletta
  *
  *
@@ -11,28 +11,28 @@
 #include <msp430.h>
 #include "GPIO_Driver.h"    // MSP430FR2355 GPIO driver created in Lab 1
 
-volatile unsigned int redDutyCycle;
-volatile unsigned int blueDutyCycle;
-volatile unsigned int greenDutyCycle;
-volatile unsigned char color;
+volatile unsigned int redDutyCycle;         // Stores the value to create the needed duty cycle of the red led
+volatile unsigned int blueDutyCycle;        // Stores the value to create the needed duty cycle of the blue led
+volatile unsigned int greenDutyCycle;       // Stores the value to create the needed duty cycle of the green led
+volatile unsigned char color;               // Stores the state (color) of the RGB LED
 
 
 void LEDInit();         // Method to initialize LEDs
-void TimerB3Init();
-void TimerB0Init();
+void TimerB3Init();     // Method to initialize timer that controls the duty cycle of the LEDS
+void TimerB0Init();     // Method to initialize timer that controls the color of the LED
 
 
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;                 // Stop WDT
 
-    redDutyCycle = 1000-1;
-    blueDutyCycle = 1000-1;
-    greenDutyCycle = 1000-1;
+    redDutyCycle = 1000-1;          // Red is set to off (100% duty cycle)
+    blueDutyCycle = 1000-1;         // Blue is set to off (100% duty cycle)
+    greenDutyCycle = 1000-1;        // Green is set to off (100% duty cycle)
     color = 0;
-    LEDInit();      // Initialize our LEDS
-    TimerB3Init();
-    TimerB0Init();
+    LEDInit();          // Initialize our LEDS
+    TimerB3Init();      // Method to initialize timer that controls the duty cycle of the LEDS
+    TimerB0Init();      // Method to initialize timer that controls the color of the LED
 
     // Disable the GPIO power-on default high-impedance mode to activate
     // previously configured port settings
@@ -86,7 +86,7 @@ void TimerB3Init() {
 void TimerB0Init() {
         TB0CCTL0 = CCIE;                          // TB0CCR0 interrupt enabled
         TB0CCR0 = 5;
-        TB0CTL = TBSSEL_1 | MC_2 | ID_3 | TBCLR | TBIE;          // ACLK, continuous mode, /8
+        TB0CTL = TBSSEL_1 | MC_2 | ID_3 | TBCLR | TBIE;          // ACLK, continuous mode, /8, clear TBR
 }
 
 
@@ -99,6 +99,7 @@ void TimerB0Init() {
 __interrupt void Timer0_B0_ISR(void)
 {
     switch(color) {
+    // LED is red and changing to orange
     case 0 :
         redDutyCycle = 0;
         blueDutyCycle = 1000-1;
@@ -107,6 +108,7 @@ __interrupt void Timer0_B0_ISR(void)
         else
             greenDutyCycle--;
         break;
+    // LED is orange and changing to green
     case 1 :
         blueDutyCycle = 1000-1;
         greenDutyCycle = 0;
@@ -115,6 +117,7 @@ __interrupt void Timer0_B0_ISR(void)
         else
             redDutyCycle++;
         break;
+    // LED is green and changing to cyan
     case 2 :
         redDutyCycle = 1000-1;
         greenDutyCycle = 0;
@@ -123,6 +126,7 @@ __interrupt void Timer0_B0_ISR(void)
         else
             blueDutyCycle--;
         break;
+    // LED is cyan and changing to blue
     case 3 :
         redDutyCycle = 1000-1;
         blueDutyCycle = 0;
@@ -131,6 +135,7 @@ __interrupt void Timer0_B0_ISR(void)
         else
             greenDutyCycle++;
         break;
+    // LED is blue and changing to purple
     case 4 :
         blueDutyCycle = 0;
         greenDutyCycle = 1000-1;
@@ -139,6 +144,7 @@ __interrupt void Timer0_B0_ISR(void)
         else
             redDutyCycle--;
         break;
+    // LED is purple and changing to blue
     case 5 :
         redDutyCycle = 0;
         greenDutyCycle = 1000-1;
@@ -149,13 +155,11 @@ __interrupt void Timer0_B0_ISR(void)
         break;
     }
 
-    if(TB0CCR0 >= 60000)
-        TB0CCR0 = 5;
-    if(TB0R >= 60000)
+    if(TB0R >= 60000)       // Clears the timer b register because it will hit 65535 and stop otherwise
         TB0R = 5;
 
     TB3CCR1 = redDutyCycle;                   // CCR1 PWM duty cycle
     TB3CCR2 = blueDutyCycle;                  // CCR2 PWM duty cycle
     TB3CCR3 = greenDutyCycle;                 // CCR3 PWM duty cycle
-    TB0CCR0 += 5;
+    TB0CCR0 += 5;       // Increments by 5 to make fading slower
 }
