@@ -5,7 +5,8 @@
  *  Edited on: Feb 28, 2023
  *      Author: Christian Cipolletta
  *
- *
+ *  This code uses a hardware PWM to make an RGB LED fade between 6 distinct colors.
+ *  The colors in order are red, orange, green, cyan, blue, and purple.
  */
 
 #include <msp430.h>

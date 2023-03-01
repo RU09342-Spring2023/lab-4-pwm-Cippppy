@@ -5,7 +5,8 @@
  *  Edited on: Feb 28, 2023
  *      Author: Christian Cipolletta
  *
- *
+ *  This code controls the angle of a servo by generating a hardware PWM.
+ *  The angle increased with the press of one button and is decreased with the press of another.
  */
 
 #include <msp430.h>
